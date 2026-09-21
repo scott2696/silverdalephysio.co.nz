@@ -1,0 +1,32 @@
+# GitHub Pages serves this repo's root from `main`. The site is pre-built by
+# _build/build.py and committed, so Jekyll has nothing to generate — it only
+# needs to copy the built files through untouched.
+#
+# Everything below MUST stay excluded. Without this file Jekyll converts every
+# .md file outside an underscore directory into a published HTML page, which
+# on this repo would put the following on the live site:
+#
+#   README.md   -> /README.html
+#       The pre-deploy checklist. It states that the masthead wordmark is not
+#       the host domain, that LEGAL names no registered company, that the
+#       author names and biographies were drafted rather than supplied, and
+#       the Racing Industry Amendment Act 2025 exposure on the betting pages.
+#       Publishing that on a live affiliate site would be actively harmful.
+#
+#   docs/*.md   -> /docs/*.html
+#       Nine internal strategy documents: the competitor teardown, the keyword
+#       map, the SEO playbook, the SERP research and the title research.
+#       robots.txt disallows /docs/, but a Disallow only asks a crawler not to
+#       look — the files would still be readable by anyone with the URL.
+#
+# _build and _source are already skipped by Jekyll's underscore rule; they are
+# listed anyway so that adding a .nojekyll file (which disables that rule)
+# cannot silently publish the build scripts and the author source portraits.
+exclude:
+  - _build
+  - _source
+  - docs
+  - README.md
+
+# Nothing here needs Sass, layouts or plugins; the HTML is already final.
+plugins: []
