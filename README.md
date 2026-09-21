@@ -283,6 +283,13 @@ Titles are measured in **pixels**, not characters, because that is how Google tr
   this site is built to point out. Re-run the rate monthly with the month stamp.
 - **No `AggregateRating` on hub pages**, deliberately — Google restricts self-serving aggregate
   ratings. `Review` schema is used on the 19 operator pages, where it belongs.
+- **All 43 pages are indexable** — `index,follow` with a self-referencing canonical, all 43 in the
+  sitemap, none orphaned (every page has 97+ inbound internal links from the nav and menu). The one
+  `noindex` is `/instant-withdrawals/`, the redirect stub, which is correct. Two things were fixed to
+  keep it that way: `robots.txt` no longer carries `Disallow: /*?` (the stylesheet is served with a
+  `?v=` hash and was the site's only query-string URL, so the rule guarded nothing and risked hiding
+  the one render-critical asset), and **PetalBot was removed from the blocked list** — it is Huawei's
+  Petal Search crawler, a search engine rather than an SEO tool.
 - **Schema is one `@graph` per page**, assembled in `lib.page()`. Two things are bound there rather
   than in the page modules, so a new page cannot forget them: an `ItemList` is attached to its
   `WebPage` as `mainEntity` (and the page typed `CollectionPage`), and author portraits flow into

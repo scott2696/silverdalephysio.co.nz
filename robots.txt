@@ -34,9 +34,6 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-User-agent: PetalBot
-Disallow: /
-
 User-agent: SEOkicks
 Disallow: /
 
@@ -56,8 +53,9 @@ Disallow: /
 User-agent: *
 Allow: /
 Allow: /assets/
+Allow: /images/
+Allow: /logos/
 Disallow: /_build/
 Disallow: /docs/
-Disallow: /*?
 
 Sitemap: https://silverdalephysio.co.nz/sitemap.xml

@@ -70,9 +70,13 @@ def sitemap():
 # SEO-tool crawlers are blocked at the user-agent level as requested. They
 # consume crawl budget and hand a competitor a map of the site for nothing in
 # return. Search engines and the AI crawlers we want indexing us are allowed.
+# PetalBot is NOT in this list, deliberately: it is Huawei's Petal Search
+# crawler, i.e. a search engine, not an SEO tool. Blocking it would make the
+# site un-indexable there for no benefit. Keep this list to backlink and rank
+# trackers; check any addition is not something that sends traffic.
 BLOCKED = ["AhrefsBot", "SemrushBot", "MJ12bot", "DotBot", "Rogerbot",
            "serpstatbot", "SistrixBot", "BLEXBot", "DataForSeoBot",
-           "Barkrowler", "ZoominfoBot", "PetalBot", "SEOkicks",
+           "Barkrowler", "ZoominfoBot", "SEOkicks",
            "LinkpadBot", "spbot", "Cliqzbot", "Screaming Frog SEO Spider"]
 
 
@@ -83,16 +87,22 @@ def robots():
     out += ["# Everything else is welcome.",
             "User-agent: *",
             "Allow: /",
-            # site.css is served with a ?v= cache-buster, so the blanket
-            # query-string rule below would hide the only stylesheet from
-            # Googlebot's renderer. Google renders pages to index them and
-            # penalises blocked CSS, so /assets/ is allowed explicitly. This
-            # wins on longest-match (8 chars vs 3) and is listed first for
-            # crawlers that take the first match instead.
+            # Render-critical assets, allowed explicitly. Google renders pages
+            # in order to index them and treats blocked CSS as a problem, so
+            # this is worth stating rather than leaving to `Allow: /`.
             "Allow: /assets/",
+            "Allow: /images/",
+            "Allow: /logos/",
+            # No `Disallow: /*?` here, deliberately. The stylesheet is served
+            # with a ?v= content hash and it is the ONLY query-string URL on
+            # the site — so a blanket query rule guards nothing and risks
+            # hiding the one asset the renderer needs. Whether it does depends
+            # on each crawler resolving `Allow: /assets/` (8 chars) against
+            # `Disallow: /*?` (3) by longest match, which Google does and
+            # others may not. Duplicate parameterised URLs are already handled
+            # the right way, by a self-referencing canonical on all 43 pages.
             "Disallow: /_build/",
             "Disallow: /docs/",
-            "Disallow: /*?",
             "", f"Sitemap: {SITE}/sitemap.xml", ""]
     open(os.path.join(ROOT, "robots.txt"), "w").write("\n".join(out))
 
@@ -100,7 +110,7 @@ def robots():
 def manifest():
     import json
     m = {"name": NAME, "short_name": NAME, "start_url": "/",
-         "display": "standalone", "background_color": "#FCFBF9",
+         "display": "standalone", "background_color": "#FAFCFB",
          "theme_color": "#1C2E26", "lang": "en-NZ",
          "icons": [{"src": f"/favicon-{s}x{s}.png", "sizes": f"{s}x{s}",
                     "type": "image/png",
